@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: relay-webhook
+spec:
+  selector:
+    matchLabels:
+      app: relay-webhook
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: relay-webhook
+    spec:
+      containers:
+        - name: relay-webhook
+          image: intrand/relay-webhook:latest
+          imagePullPolicy: Always
+
+          resources:
+            requests:
+              cpu: "5m"
+              memory: "5Mi"
+            limits:
+              cpu: "50m"
+              memory: "20Mi"
+
+          ports:
+            - containerPort: 8000
+              name: http
+              protocol: TCP
+
+          env:
+            - name: discord_webhook
+              valueFrom:
+                secretKeyRef:
+                  name: relay-webhook
+                  key: discordWebhook

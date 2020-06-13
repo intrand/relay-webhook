@@ -1,0 +1,17 @@
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: relay-webhook
+spec:
+  tls:
+    - hosts:
+      - domain.tld
+  rules:
+  - host: domain.tld
+    http:
+      paths:
+        - path: /relay/v1/docker-hub
+          backend:
+            serviceName: relay-webhook
+            servicePort: 8000
